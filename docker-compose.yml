@@ -1,0 +1,20 @@
+version: '2'
+services:
+  mnist-api:
+    container_name: mnist-api
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    restart: 'on-failure'
+    ports:
+      - 8000:8000
+  prometheus:
+    container_name: prometheus-app
+    image: prom/prometheus:latest
+    restart: always
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    ports:
+      - 9090:9090
