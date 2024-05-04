@@ -8,11 +8,14 @@ import argparse
 import ast
 import prometheus_client
 from prometheus_fastapi_instrumentator import Instrumentator
-from prometheus_client import Gauge
+from prometheus_client import Gauge,Summary,disable_created_metrics
 import time
 
 REQUEST_COUNT = prometheus_client.Counter('app_requests_total', 'Total HTTP requests processed', ['method', 'endpoint', 'client_ip'])
+# disable _created metric.
+disable_created_metrics()
 
+REQUEST_DURATION = Summary('api_timing', 'Request duration in seconds')
 instrumentator = Instrumentator(
     should_group_status_codes=False,
     should_ignore_untemplated=True,
